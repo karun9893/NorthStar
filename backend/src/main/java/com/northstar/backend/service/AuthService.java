@@ -1,10 +1,13 @@
 package com.northstar.backend.service;
 
+import com.northstar.backend.JwtUtil;
 import com.northstar.backend.model.User;
 import com.northstar.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AuthService {
@@ -15,47 +18,50 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Register
-    public String register(String email, String password) {
+    @Autowired
+    private JwtUtil jwtUtil;
 
-        // 1. Email already exists?
+    public String register(String email, String password) {
         if(userRepository.existsByEmail(email)) {
             return "Email already exists!";
         }
-
-        // 2. Naya user banao
         User user = new User();
         user.setEmail(email);
-
-        // 3. Password encrypt karo
-        user.setPassword(
-                passwordEncoder.encode(password));
-
-        // 4. Database mein save karo
+        user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-
         return "Registration successful!";
     }
 
-    // Login
-    public String login(String email, String password) {
+    // Login ab token return karega
+    public Map<String, String> login(
+            String email, String password) {
+
+        Map<String, String> response = new HashMap<>();
 
         // 1. User dhundho
         User user = userRepository
                 .findByEmail(email)
                 .orElse(null);
 
-        // 2. User nahi mila?
+        // 2. User nahi mila
         if(user == null) {
-            return "User not found!";
+            response.put("error", "User not found!");
+            return response;
         }
 
         // 3. Password check karo
         if(!passwordEncoder.matches(
                 password, user.getPassword())) {
-            return "Invalid password!";
+            response.put("error", "Invalid password!");
+            return response;
         }
 
-        return "Login successful!";
+        // 4. Token generate karo
+        String token = jwtUtil.generateToken(email);
+        response.put("token", token);
+        response.put("email", email);
+        response.put("message", "Login successful!");
+
+        return response;
     }
 }
