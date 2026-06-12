@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Dashboard() {
     const [email, setEmail] = useState("");
@@ -23,12 +21,12 @@ export default function Dashboard() {
     };
 
     const features = [
-        { icon: "👤", title: "My Profile", desc: "Manage your student profile", color: "from-blue-500 to-cyan-500" },
-        { icon: "🛠️", title: "My Skills", desc: "Track and manage your skills", color: "from-purple-500 to-pink-500" },
-        { icon: "📄", title: "Resume", desc: "Upload and analyze resume", color: "from-orange-500 to-red-500" },
-        { icon: "🤖", title: "AI Roadmap", desc: "Get personalized learning path", color: "from-green-500 to-emerald-500" },
-        { icon: "🏢", title: "Companies", desc: "Get company recommendations", color: "from-yellow-500 to-orange-500" },
-        { icon: "🎯", title: "Interview Prep", desc: "Prepare for interviews with AI", color: "from-pink-500 to-rose-500" },
+        { icon: "👤", title: "My Profile", desc: "Manage your student profile", color: "#3b82f6", link: "/profile" },
+        { icon: "🛠️", title: "My Skills", desc: "Track and manage your skills", color: "#8b5cf6", link: "/skills" },
+        { icon: "📄", title: "Resume", desc: "Upload and analyze resume", color: "#f97316", link: "/resume" },
+        { icon: "🤖", title: "AI Roadmap", desc: "Get personalized learning path", color: "#22c55e", link: "/roadmap" },
+        { icon: "🏢", title: "Companies", desc: "Get company recommendations", color: "#eab308", link: "/companies" },
+        { icon: "🎯", title: "Interview Prep", desc: "Prepare for interviews with AI", color: "#ec4899", link: "/interview" },
     ];
 
     return (
@@ -50,7 +48,9 @@ export default function Dashboard() {
             </nav>
 
             <div style={{maxWidth: '1200px', margin: '0 auto', padding: '40px 24px'}}>
-                <h1 style={{color: 'white', fontSize: '28px', fontWeight: 'bold', marginBottom: '8px'}}>Welcome back! 👋</h1>
+                <h1 style={{color: 'white', fontSize: '28px', fontWeight: 'bold', marginBottom: '8px'}}>
+                    Welcome back! 👋
+                </h1>
                 <p style={{color: '#94a3b8', marginBottom: '40px'}}>{email}</p>
 
                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '40px'}}>
@@ -66,17 +66,21 @@ export default function Dashboard() {
                     ))}
                 </div>
 
-                <h2 style={{color: '#cbd5e1', fontSize: '18px', fontWeight: '600', marginBottom: '16px'}}>Features</h2>
+                <h2 style={{color: '#cbd5e1', fontSize: '18px', fontWeight: '600', marginBottom: '16px'}}>
+                    Features
+                </h2>
                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
                     {features.map((feature) => (
                         <div key={feature.title}
-                             style={{backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '24px', cursor: 'pointer'}}>
-                            <div style={{width: '40px', height: '40px', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px'}}>
+                             onClick={() => router.push(feature.link)}
+                             style={{backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '24px', cursor: 'pointer', transition: 'all 0.2s'}}
+                             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#263548')}
+                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#1e293b')}>
+                            <div style={{width: '40px', height: '40px', backgroundColor: feature.color, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px'}}>
                                 <span>{feature.icon}</span>
                             </div>
                             <h3 style={{color: 'white', fontWeight: '600', marginBottom: '8px'}}>{feature.title}</h3>
                             <p style={{color: '#94a3b8', fontSize: '14px'}}>{feature.desc}</p>
-                            <p style={{color: '#475569', fontSize: '12px', marginTop: '8px'}}>Coming soon...</p>
                         </div>
                     ))}
                 </div>
