@@ -2,23 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Dashboard() {
-
     const [email, setEmail] = useState("");
     const router = useRouter();
 
     useEffect(() => {
-        // Token check karo
         const token = localStorage.getItem("token");
         const savedEmail = localStorage.getItem("email");
-
-        // Token nahi hai → login pe bhejo
-        if(!token) {
-            router.push("/login");
-            return;
-        }
-
+        if (!token) { router.push("/login"); return; }
         setEmail(savedEmail || "");
     }, []);
 
@@ -28,73 +22,63 @@ export default function Dashboard() {
         router.push("/login");
     };
 
-    return (
-        <div className="min-h-screen bg-gray-100">
+    const features = [
+        { icon: "👤", title: "My Profile", desc: "Manage your student profile", color: "from-blue-500 to-cyan-500" },
+        { icon: "🛠️", title: "My Skills", desc: "Track and manage your skills", color: "from-purple-500 to-pink-500" },
+        { icon: "📄", title: "Resume", desc: "Upload and analyze resume", color: "from-orange-500 to-red-500" },
+        { icon: "🤖", title: "AI Roadmap", desc: "Get personalized learning path", color: "from-green-500 to-emerald-500" },
+        { icon: "🏢", title: "Companies", desc: "Get company recommendations", color: "from-yellow-500 to-orange-500" },
+        { icon: "🎯", title: "Interview Prep", desc: "Prepare for interviews with AI", color: "from-pink-500 to-rose-500" },
+    ];
 
-            {/* Navbar */}
-            <nav className="bg-blue-600 text-white p-4">
-                <div className="max-w-6xl mx-auto
-                    flex justify-between items-center">
-                    <h1 className="text-xl font-bold">
-                        🌟 NorthStar
-                    </h1>
-                    <button
-                        onClick={handleLogout}
-                        className="bg-white text-blue-600
-                            px-4 py-2 rounded-lg text-sm
-                            font-semibold hover:bg-gray-100">
+    return (
+        <div style={{backgroundColor: '#0f172a', minHeight: '100vh'}}>
+            <nav style={{backgroundColor: '#1e293b', borderBottom: '1px solid #334155', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                    <div style={{width: '36px', height: '36px', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <span>🌟</span>
+                    </div>
+                    <span style={{color: 'white', fontWeight: 'bold', fontSize: '20px'}}>NorthStar</span>
+                </div>
+                <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+                    <span style={{color: '#94a3b8', fontSize: '14px'}}>{email}</span>
+                    <button onClick={handleLogout}
+                            style={{border: '1px solid #475569', color: '#cbd5e1', backgroundColor: 'transparent', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px'}}>
                         Logout
                     </button>
                 </div>
             </nav>
 
-            {/* Content */}
-            <div className="max-w-6xl mx-auto p-8">
-                <h2 className="text-2xl font-bold mb-2">
-                    Welcome back! 👋
-                </h2>
-                <p className="text-gray-600 mb-8">
-                    {email}
-                </p>
+            <div style={{maxWidth: '1200px', margin: '0 auto', padding: '40px 24px'}}>
+                <h1 style={{color: 'white', fontSize: '28px', fontWeight: 'bold', marginBottom: '8px'}}>Welcome back! 👋</h1>
+                <p style={{color: '#94a3b8', marginBottom: '40px'}}>{email}</p>
 
-                {/* Feature Cards */}
-                <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-white p-6
-                        rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">
-                            👤 My Profile
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                            Coming soon...
-                        </p>
-                    </div>
-                    <div className="bg-white p-6
-                        rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">
-                            🛠️ My Skills
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                            Coming soon...
-                        </p>
-                    </div>
-                    <div className="bg-white p-6
-                        rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">
-                            📄 Resume
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                            Coming soon...
-                        </p>
-                    </div>
-                    <div className="bg-white p-6
-                        rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">
-                            🤖 AI Roadmap
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                            Coming soon...
-                        </p>
-                    </div>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '40px'}}>
+                    {[
+                        { label: "Profile Complete", value: "20%" },
+                        { label: "Skills Added", value: "0" },
+                        { label: "Days to Placement", value: "90" },
+                    ].map((stat) => (
+                        <div key={stat.label} style={{backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '20px', textAlign: 'center'}}>
+                            <p style={{color: 'white', fontSize: '24px', fontWeight: 'bold'}}>{stat.value}</p>
+                            <p style={{color: '#94a3b8', fontSize: '14px', marginTop: '4px'}}>{stat.label}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <h2 style={{color: '#cbd5e1', fontSize: '18px', fontWeight: '600', marginBottom: '16px'}}>Features</h2>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px'}}>
+                    {features.map((feature) => (
+                        <div key={feature.title}
+                             style={{backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '24px', cursor: 'pointer'}}>
+                            <div style={{width: '40px', height: '40px', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px'}}>
+                                <span>{feature.icon}</span>
+                            </div>
+                            <h3 style={{color: 'white', fontWeight: '600', marginBottom: '8px'}}>{feature.title}</h3>
+                            <p style={{color: '#94a3b8', fontSize: '14px'}}>{feature.desc}</p>
+                            <p style={{color: '#475569', fontSize: '12px', marginTop: '8px'}}>Coming soon...</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
